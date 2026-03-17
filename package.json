@@ -82,7 +82,6 @@
     "react": "^19.2.4",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.4",
-    "react-joyride": "^2.9.3",
     "reflect-metadata": "^0.2.2",
     "sonner": "^2.0.7"
   },
