@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN node ace build
+RUN node ace.js build
 WORKDIR /app/build
 RUN npm ci --omit=dev
 EXPOSE 3333
