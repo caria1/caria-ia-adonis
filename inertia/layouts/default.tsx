@@ -4,7 +4,7 @@ import { usePage, Link, router } from '@inertiajs/react'
 import { motion } from 'framer-motion'
 import { Form } from '@adonisjs/inertia/react'
 import { Moon, Bell, ChevronDown, User, Settings, LogOut, LayoutGrid, FileText, Landmark, TrendingUp, Target, Search, Tag } from 'lucide-react'
-import Joyride, { STATUS } from 'react-joyride'
+
 
 export default function Layout({ children }: { children: ReactElement<any> }) {
   const { user } = usePage().props as any
@@ -12,73 +12,6 @@ export default function Layout({ children }: { children: ReactElement<any> }) {
   const [sidebarSearch, setSidebarSearch] = useState('')
   const [aiResponse, setAiResponse] = useState<string | null>(null)
   const [isAiLoading, setIsAiLoading] = useState(false)
-  const [runTour, setRunTour] = useState(false)
-  const currentPath = usePage().url.split('?')[0] // removing query params
-
-  const pageTours: Record<string, any[]> = {
-    '/': [
-      {
-        target: '.sidebar-user-card',
-        content: 'Bem-vindo ao Caria IA! Aqui é o seu perfil de inteligência financeira.',
-        disableBeacon: true,
-      },
-      {
-        target: '.glow-card',
-        content: 'Acompanhe seu progresso e metas nestes cartões premium interativos.',
-      },
-      {
-        target: '.ai-advisor-bar',
-        content: 'Tem dúvidas? Converse com nossa IA treinada para te enviar os melhores conselhos financeiros!',
-      }
-    ],
-    '/categories': [
-      {
-        target: '.dashboard-content',
-        content: 'Aqui você gerencia suas categorias. Clique para definir as metas mensais ou editar!',
-        disableBeacon: true,
-      },
-      {
-        target: '.btn-auth', // The Add Novo Button
-        content: 'Crie novos orçamentos para acompanhar mais de perto suas finanças.',
-      }
-    ],
-    '/banks': [
-      {
-        target: '.dashboard-content',
-        content: 'Sincronize ou registre manualmente seus bancos para a IA consolidar seu saldo.',
-        disableBeacon: true,
-      }
-    ],
-    '/transactions': [
-      {
-        target: '.dashboard-content',
-        content: 'Todo seu histórico de ganhos e gastos fica aqui. Use transações recorrentes para agilidade.',
-        disableBeacon: true,
-      }
-    ]
-  }
-
-  const activeTourSteps = pageTours[currentPath] || []
-
-  useEffect(() => {
-    if (user && activeTourSteps.length > 0) {
-      const tourKey = `caria_tour_${currentPath}`
-      if (!localStorage.getItem(tourKey)) {
-        setTimeout(() => setRunTour(true), 1000) // Small delay to let UI render
-      }
-    } else {
-      setRunTour(false)
-    }
-  }, [user, currentPath, activeTourSteps.length])
-
-  const handleJoyrideCallback = (data: any) => {
-    const { status } = data
-    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status as any)) {
-      const tourKey = `caria_tour_${currentPath}`
-      localStorage.setItem(tourKey, 'true')
-      setRunTour(false)
-    }
-  }
 
   const askAi = (query: string) => {
     setIsAiLoading(true)
@@ -338,37 +271,6 @@ export default function Layout({ children }: { children: ReactElement<any> }) {
         )}
       </main>
 
-      <Joyride
-        steps={activeTourSteps}
-        run={runTour}
-        continuous
-        showSkipButton
-        callback={handleJoyrideCallback}
-        locale={{ last: 'Finalizar', skip: 'Pular', next: 'Próximo', back: 'Anterior' }}
-        styles={{
-          options: {
-            primaryColor: '#7B2FBE',
-            backgroundColor: '#1E1E2D',
-            textColor: '#fff',
-            arrowColor: '#1E1E2D',
-          },
-          tooltip: {
-            borderRadius: '16px',
-            border: '1px solid rgba(255,255,255,0.1)',
-            fontFamily: 'Outfit, sans-serif'
-          },
-          buttonNext: {
-            borderRadius: '12px',
-            fontWeight: '700'
-          },
-          buttonBack: {
-            color: '#a1a1aa'
-          },
-          buttonSkip: {
-            color: '#a1a1aa'
-          }
-        }}
-      />
 
       <Toaster position="top-right" richColors />
     </div>
