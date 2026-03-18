@@ -6,7 +6,7 @@ const dbConfig = defineConfig({
   /**
    * Default connection used for all queries.
    */
-  connection: env.get('DB_CONNECTION', 'sqlite'),
+  connection: app.inProduction ? 'pg' : env.get('DB_CONNECTION', 'sqlite'),
 
   connections: {
     /**
